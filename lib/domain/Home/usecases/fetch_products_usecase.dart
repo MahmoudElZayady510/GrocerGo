@@ -1,10 +1,10 @@
 import '../../../data/Home/repositories/product.dart';
 import '../Models/product.dart';
 
-class FetchGroceries {
+class FetchGroceriesUsecase {
   final GroceryRepository repository;
 
-  FetchGroceries(this.repository);
+  FetchGroceriesUsecase(this.repository);
 
   Stream<List<Grocery>> call() {
     return repository.fetchGroceries();

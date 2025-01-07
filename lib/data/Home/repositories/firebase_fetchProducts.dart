@@ -21,10 +21,30 @@ class FirebaseGroceryRepository implements GroceryRepository {
           price: data['price'] ?? 999999,
           image: data['image'] ?? 'abc',
             description: data['description'] ?? 'no desc',
+          category: data['category'] ?? 'noCat'
         );
       }).toList();
     });
   }
+  @override
+  Stream<List<Grocery>> fetchGroceriesByCategory(String category) {
+    return firestore.collection('groceries').where('category' , isEqualTo: category).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        // print(data);
+        return Grocery(
+          id: doc.id,
+          name: data['name'] ?? 'noname',
+          price: data['price'] ?? 999999,
+          image: data['image'] ?? 'abc',
+          description: data['description'] ?? 'no desc',
+          category: data['category'] ?? 'noCat'
+        );
+      }).toList();
+    });
+  }
+
+
   // @override
   // Future<List<Grocery>> fetchGroceries() async {
   //   final snapshot = await firestore.collection('groceries').get();

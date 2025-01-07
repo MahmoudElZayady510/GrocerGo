@@ -1,4 +1,4 @@
-import '../domain/cart/model/cart_item.dart';
+import '../../../domain/cart/model/cart_item.dart';
 
 abstract class CartRepository {
   Future<void> addItemToCart(CartItem item);

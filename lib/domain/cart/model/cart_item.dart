@@ -2,15 +2,19 @@ class CartItem {
   final String id;
   final String name;
   final String image;
+  final String category;
+  final String description;
   final double price;
   final int quantity;
 
-  CartItem({
+  CartItem( {
     required this.id,
     required this.name,
     required this.image,
     required this.price,
     required this.quantity,
+    required this.description,
+    required this.category,
   });
 
   // Serialization for Firebase
@@ -21,6 +25,8 @@ class CartItem {
       'image': image,
       'price': price,
       'quantity': quantity,
+      'description': description,
+      'category': category
     };
   }
 
@@ -29,9 +35,11 @@ class CartItem {
     return CartItem(
       id: map['id'] ?? 'id',
       name: map['name'] ?? 'noName',
-      image: map['imageUrl'] ?? 'image',
+      image: map['image'] ?? 'image',
       price: map['price'] ?? 99999,
       quantity: map['quantity'] ?? 999999,
+      description: map['description'] ?? 'nodesc',
+      category: map['category'] ?? 'noCat'
     );
   }
   Map<String, dynamic> toJson() {
@@ -41,6 +49,7 @@ class CartItem {
       'image': image,
       'price': price,
       'quantity': quantity,
+      'description': description
     };
   }
 }

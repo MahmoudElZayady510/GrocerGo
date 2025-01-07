@@ -1,12 +1,12 @@
-import '../../../common/cart_repository.dart';
+import '../../../data/cart/repository/cart_repository.dart';
 import '../model/cart_item.dart';
 
-class AddToCart {
+class AddToCartUsecase {
   final CartRepository cartRepository;
 
-  AddToCart(this.cartRepository);
+  AddToCartUsecase(this.cartRepository);
 
-  Future<void> execute(CartItem item) async {
+  Future<void> call(CartItem item) async {
     await cartRepository.addItemToCart(item);
   }
 }
