@@ -7,7 +7,12 @@ class AddItemEvent extends CartEvent {
 
   AddItemEvent(this.item);
 }
+class UpdateItemEvent extends CartEvent{
+  final String itemId;
+  final int quantity;
 
+  UpdateItemEvent(this.itemId, this.quantity);
+}
 class RemoveItemEvent extends CartEvent {
   final String itemId;
 

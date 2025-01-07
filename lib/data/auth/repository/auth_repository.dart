@@ -1,19 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepository {
   Future<User?> signIn(String email, String password);
   Future<User?> signUp(String email, String password);
   Future<void> logout();
+
+  Future<void> createUserDocument(String userId, Map<String, dynamic> userData);
 }
 
 class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuth _firebaseAuth;
-  FirebaseAuthRepository(this._firebaseAuth);
+  final FirebaseFirestore _firestore;
+  FirebaseAuthRepository(this._firebaseAuth , this._firestore);
 
   @override
   Future<User?> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      final userCreds = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      // return userCreds.user; //added
     } on FirebaseAuthException catch (e) {
       // Handle Firebase-specific errors
       switch (e.code) {
@@ -35,21 +40,32 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<User?> signUp(String email, String password) async{
+  Future<void> logout() async{
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message); // Re-throw the error for handling in the UI
     }
   }
 
+  @override
+  Future<User?> signUp(String email, String password) async{
+    try {
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message); // Re-throw the error for handling in the UI
+    }
+  }
+  Future<void> createUserDocument(String userId, Map<String, dynamic> userData) async {
+    try {
+      await _firestore.collection('users').doc(userId).set(userData);
+    } catch (e) {
+      print(e);
+      throw Exception('Error creating user document: $e');
+    }
+  }
 }

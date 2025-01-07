@@ -2,10 +2,10 @@
 
 import '../../../data/auth/repository/auth_repository.dart';
 
-class LogoutUser {
+class LogoutUserUsecase {
   final AuthRepository repository;
 
-  LogoutUser(this.repository);
+  LogoutUserUsecase(this.repository);
 
   Future<void> call() {
     return repository.logout();
