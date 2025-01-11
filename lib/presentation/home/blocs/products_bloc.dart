@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:groceries/domain/Home/usecases/fetch_bestSelling_usecase.dart';
 import 'package:groceries/domain/Home/usecases/fetch_products_by_category.dart';
 import 'package:meta/meta.dart';
 
@@ -13,7 +14,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
   final FetchGroceriesUsecase fetchGroceries;
   final FetchGroceriesByCategoryUsecase fetchGroceriesByCategory;
-  ProductsBloc(this.fetchGroceries, this.fetchGroceriesByCategory) : super(ProductsLoading()) {
+  ProductsBloc(this.fetchGroceries, this.fetchGroceriesByCategory,) : super(ProductsLoading()) {
     on<FetchGroceryList>((event, emit) async {
 
       emit(ProductsLoading());

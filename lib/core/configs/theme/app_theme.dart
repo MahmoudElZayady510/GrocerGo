@@ -4,7 +4,7 @@ import 'package:groceries/core/configs/theme/app_colors.dart';
 
 class AppTheme{
   static final appTheme = ThemeData(
-    fontFamily: GoogleFonts.glory().fontFamily, //make sure it works
+    fontFamily: GoogleFonts.poppins().fontFamily, //make sure it works
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.backgroundColor,
     // brightness: Brightness.dark,

@@ -42,7 +42,10 @@ dependencies:
   get_it: ^8.0.2
   equatable: ^2.0.7
   google_fonts: ^6.2.1
-  palette_generator: ^0.3.3+5
+#  google_fonts: ^4.0.4
+#  palette_generator: ^0.3.3+5
+#  google_maps_flutter: ^2.2.1
+#  flutter_google_places: ^0.3.0
 
 dev_dependencies:
   flutter_test:

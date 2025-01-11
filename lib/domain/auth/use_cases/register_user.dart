@@ -8,7 +8,7 @@ class SignUpUseCase  {
   SignUpUseCase (this.repository);
 
   // Future<void> call(String email, String password, String username) async {
-  Future<void> call(String email, String password , String firstName , String lastName) async {
+  Future<void> call(String email, String password , String firstName , String lastName, String address) async {
     try {
       final user = await repository.signUp(email, password);
       print(user);
@@ -17,6 +17,7 @@ class SignUpUseCase  {
           'email': email,
           'firstName': firstName,
           'lastName': lastName,
+          'address': address,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }

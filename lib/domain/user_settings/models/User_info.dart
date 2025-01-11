@@ -3,7 +3,8 @@ class UserData{
   final String firstName;
   final String lastName;
   final String email;
+  final String address;
   // final String image;
 
-  UserData({required this.id, required this.email, required this.firstName , required this.lastName});
+  UserData({required this.id, required this.email, required this.firstName , required this.lastName, required this.address});
 }

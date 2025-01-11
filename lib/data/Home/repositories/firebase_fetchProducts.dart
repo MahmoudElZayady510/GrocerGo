@@ -21,7 +21,45 @@ class FirebaseGroceryRepository implements GroceryRepository {
           price: data['price'] ?? 999999,
           image: data['image'] ?? 'abc',
             description: data['description'] ?? 'no desc',
-          category: data['category'] ?? 'noCat'
+          category: data['category'] ?? 'noCat',
+          unit: data['unit'] ?? 'Unit'
+        );
+      }).toList();
+    });
+  }
+  @override
+  Stream<List<Grocery>> fetchBestSelling() {
+    return firestore.collection('bestSellings').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        // print(data);
+        return Grocery(
+            id: doc.id,
+            name: data['name'] ?? 'noname',
+            price: data['price'] ?? 999999,
+            image: data['image'] ?? 'abc',
+            description: data['description'] ?? 'no desc',
+            category: data['category'] ?? 'noCat',
+          unit: data['unit'] ?? 'Unit'
+            //Todo add unit field in newArrival and bestSelling collections
+        );
+      }).toList();
+    });
+  }
+  @override
+  Stream<List<Grocery>> fetchNewArrival() {
+    return firestore.collection('newArrival').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        // print(data);
+        return Grocery(
+            id: doc.id,
+            name: data['name'] ?? 'noname',
+            price: data['price'] ?? 999999,
+            image: data['image'] ?? 'abc',
+            description: data['description'] ?? 'no desc',
+            category: data['category'] ?? 'noCat',
+            unit: data['unit'] ?? 'Unit'
         );
       }).toList();
     });
@@ -38,7 +76,8 @@ class FirebaseGroceryRepository implements GroceryRepository {
           price: data['price'] ?? 999999,
           image: data['image'] ?? 'abc',
           description: data['description'] ?? 'no desc',
-          category: data['category'] ?? 'noCat'
+          category: data['category'] ?? 'noCat',
+            unit: data['unit'] ?? 'noUnit'
         );
       }).toList();
     });

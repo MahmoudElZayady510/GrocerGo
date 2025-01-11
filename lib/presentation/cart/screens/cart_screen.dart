@@ -90,6 +90,7 @@ class CartScreen extends StatelessWidget {
                                     quantity: item.quantity,
                                     description: item.description,
                                     category: item.category,
+                                    unit: item.unit,
                                   ),
                                   Divider(
                                     color: Color(0xffCDC7AB),
@@ -186,9 +187,10 @@ class CartItemCard extends StatelessWidget {
   final String image;
   final String category;
   final String description;
+  final String unit;
   final int quantity;
   final double price;
-  const CartItemCard({super.key, required this.name, required this.image, required this.quantity, required this.price, required this.itemId, required this.description, required this.category});
+  const CartItemCard({super.key, required this.name, required this.image, required this.quantity, required this.price, required this.itemId, required this.description, required this.category, required this.unit});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +208,8 @@ class CartItemCard extends StatelessWidget {
                 'image' : image,
                 'description': description,
                 'price' : price,
-                'category': category
+                'category': category,
+                'unit': unit
               });
             },
             child: Row(

@@ -8,3 +8,10 @@ class FetchSearch implements SearchEvent{
   FetchSearch(this.query);
 }
 class SearchResetEvent implements SearchEvent{}
+class SearchSort implements SearchEvent{
+  final String sortOptions;
+  // final String filterCategory;
+
+  SearchSort({required this.sortOptions ,});
+
+}

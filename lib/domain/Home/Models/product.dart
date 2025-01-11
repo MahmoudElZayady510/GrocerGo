@@ -5,6 +5,7 @@ class Grocery {
   final String image;
   final String category;
   final String description;
+  final String unit;
 
   Grocery({
     required this.id,
@@ -13,6 +14,7 @@ class Grocery {
     required this.image,
     required this.description,
     required this.category,
+    required this.unit,
   });
 
   factory Grocery.fromMap(Map<String, dynamic> map) {
@@ -22,7 +24,8 @@ class Grocery {
       price: map['price'] ?? 999999,
       image: map['image'] ?? 'image',
       description: map['description'] ?? 'des',
-      category: map['category'] ?? 'noCat'
+      category: map['category'] ?? 'noCat',
+      unit: map['unit'] ?? 'Unit'
     );
   }
 }

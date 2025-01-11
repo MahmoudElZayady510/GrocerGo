@@ -4,6 +4,7 @@ class CartItem {
   final String image;
   final String category;
   final String description;
+  final String unit;
   final double price;
   final int quantity;
 
@@ -15,6 +16,7 @@ class CartItem {
     required this.quantity,
     required this.description,
     required this.category,
+    required this.unit,
   });
 
   // Serialization for Firebase
@@ -26,7 +28,8 @@ class CartItem {
       'price': price,
       'quantity': quantity,
       'description': description,
-      'category': category
+      'category': category,
+      'unit': unit
     };
   }
 
@@ -39,7 +42,8 @@ class CartItem {
       price: map['price'] ?? 99999,
       quantity: map['quantity'] ?? 999999,
       description: map['description'] ?? 'nodesc',
-      category: map['category'] ?? 'noCat'
+      category: map['category'] ?? 'noCat',
+      unit: map['unit'] ?? 'Unit'
     );
   }
   Map<String, dynamic> toJson() {
