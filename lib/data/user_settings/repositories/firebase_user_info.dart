@@ -24,7 +24,8 @@ class FirebaseUserInfoRepository implements UserInfoRepository {
             id: docSnapshot.id,
             email: data?['email'] ?? 'noemail', // Fallback to 'noemail' if null
             firstName: data?['firstName'] ?? 'noFName',
-            lastName: data?['lastName'] ?? 'noLName'
+            lastName: data?['lastName'] ?? 'noLName',
+            address: data?['address'] ?? 'noAddress'
             // image: data?['image'] ?? 'noimage' // Fallback to 'noimage' if null
             );
         //bad code

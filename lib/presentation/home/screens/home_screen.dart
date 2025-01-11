@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groceries/common/widgets/search_field.dart';
 import 'package:groceries/core/configs/theme/app_colors.dart';
+import 'package:groceries/presentation/home/blocs/best_sellings/best_selling_bloc.dart';
+import 'package:groceries/presentation/home/blocs/new_arrival_bloc/new_arrival_bloc.dart';
+import 'package:groceries/presentation/user_profile/blocs/user_info_bloc.dart';
 
 import '../../../common/widgets/cat_item_card.dart';
 import '../../../common/widgets/product_card.dart';
@@ -38,9 +41,35 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      'Deliver to Location',
-                      style: TextStyle(color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Deliver to Location ',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          BlocBuilder<UserInfoBloc,UserInfoState>(
+                              builder: (context, state) {
+                                if (state is UserInfoLoading) {
+                                  context.read<UserInfoBloc>().add(FetchUserInfo());
+                                }
+                                if(state is UserInfoLoaded){
+                                  return Text(state.userData.address,
+                                    style: TextStyle(color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16
+                                    ),
+                                  );
+                                }
+                                else {
+                                  print('not loaded');
+                                  return Text('');
+                                }
+                              }
+                              )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -110,28 +139,25 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 5,),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset('assets/pics/banner.png',
-                        // height: 200,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: (){
+                      context.read<ProductsBloc>().add(FetchGroceryListByCategory(category: 'Vegetables'));
+                      Navigator.pushNamed(context, '/category',arguments:'Vegetables');
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset('assets/pics/banner.png',
+                          // height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                      ),
+                      // child: Image.network('https://media.istockphoto.com/id/1040917000/photo/collection-of-packaged-food-on-grey-background-3d-illustration.jpg?s=2048x2048&w=is&k=20&c=8LRX-RuwrDeqNNkpCS9m6dylrfL7NxSQSHifGWTnta8=',
+                      //   height: 200,
+                      //   width: double.infinity,
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
-                    // child: Image.network('https://media.istockphoto.com/id/1040917000/photo/collection-of-packaged-food-on-grey-background-3d-illustration.jpg?s=2048x2048&w=is&k=20&c=8LRX-RuwrDeqNNkpCS9m6dylrfL7NxSQSHifGWTnta8=',
-                    //   height: 200,
-                    //   width: double.infinity,
-                    //   fit: BoxFit.cover,
-                    // ),
                   ),
-                  SizedBox(height: 10,),
-                  Text('Exclusive Offers',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  _exclusiveOffers(),
                   SizedBox(height: 10,),
                   Text('Best Selling',
                     style: TextStyle(
@@ -140,7 +166,16 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  _exclusiveOffers()
+                  _bestSelling(),
+                  SizedBox(height: 10,),
+                  Text('New Arrival',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  _newArrival()
                   // Row(
                   //   children: [
                   //     Expanded(
@@ -175,19 +210,17 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-  Widget _exclusiveOffers(){
-    return BlocConsumer<ProductsBloc, ProductsState>(
+  Widget _bestSelling(){
+    return BlocConsumer<BestSellingBloc, BestSellingState>(
       listener: (context, state) {
         // TODO: implement listener
       },
       builder: (context, state) {
-        if (state is ProductsLoading) {
+        if (state is BestSellingLoading) {
           print('state is loading');
-          // context
-          //     .read<ProductsBloc>()
-          //     .add(FetchGroceryListByCategory(category: 'Fruits'));
+          context.read<BestSellingBloc>().add(FetchBestSellingList());
           return Center(child: CircularProgressIndicator());
-        } else if (state is ProductsLoaded) {
+        } else if (state is BestSellingLoaded) {
           print('state is loaded');
           return SizedBox(
             // width: 100,
@@ -205,12 +238,55 @@ class HomeScreen extends StatelessWidget {
                         id: item.id,
                         description: item.description,
                       category: item.category,
+                      unit: item.unit,
                     ),
                   );
                 }),
           );
-        } else if (state is ProductsError) {
-          return Center(child: Text('Error: ${state.error}'));
+        } else if (state is BestSellingError) {
+          return Center(child: Text('Error: ${state.message}'));
+        } else {
+          return Center(child: Text('Unknown Error'));
+        }
+      },
+    );
+  }
+
+  Widget _newArrival(){
+    return BlocConsumer<NewArrivalBloc, NewArrivalState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        if (state is NewArrivalLoading) {
+          print('state is loading');
+          context.read<NewArrivalBloc>().add(FetchNewArrivalList());
+          return Center(child: CircularProgressIndicator());
+        } else if (state is NewArrivalLoaded) {
+          print('state is loaded');
+          return SizedBox(
+            // width: 100,
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.groceries.length,
+                itemBuilder: (context, index) {
+                  final item = state.groceries[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ProductCard(name: item.name,
+                      image: item.image,
+                      price: item.price,
+                      id: item.id,
+                      description: item.description,
+                      category: item.category,
+                      unit: item.unit,
+                    ),
+                  );
+                }),
+          );
+        } else if (state is NewArrivalError) {
+          return Center(child: Text('Error: ${state.message}'));
         } else {
           return Center(child: Text('Unknown Error'));
         }

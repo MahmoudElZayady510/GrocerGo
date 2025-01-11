@@ -7,6 +7,7 @@ import 'package:groceries/presentation/auth/screens/signup_screen.dart';
 import 'package:groceries/presentation/cart/screens/cart_screen.dart';
 import 'package:groceries/presentation/category/screens/products_by_category.dart';
 import 'package:groceries/presentation/home/screens/home_screen.dart';
+import 'package:groceries/presentation/search/screens/search_filters.dart';
 import 'package:groceries/presentation/search/screens/search_screen.dart';
 
 import '../presentation/product_details/screens/details_screen.dart';
@@ -35,6 +36,8 @@ class RouteGenerator {
         );
       case '/signup':
         return MaterialPageRoute(builder: (_) => SignUpScreen());
+      case '/filters':
+        return MaterialPageRoute(builder: (_) => SearchFilters());
       case '/details':
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
@@ -45,6 +48,7 @@ class RouteGenerator {
             description: args['description'] ?? 'noDesc',
             price: args['price'] ?? 999999999,
             category: args['category'] ?? 'noCat',
+            unit: args['unit'] ?? 'Unit',
           ),
         );
       case '/category':

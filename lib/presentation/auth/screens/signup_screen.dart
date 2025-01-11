@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groceries/core/configs/theme/app_colors.dart';
 
+import '../../user_profile/blocs/user_info_bloc.dart';
 import '../blocs/signup_bloc/sign_up_bloc.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -9,12 +10,13 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -52,6 +54,11 @@ class SignUpScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 SizedBox(height: 10,),
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(labelText: "address"),
+                ),
+                SizedBox(height: 10,),
                 BlocBuilder<SignUpBloc, SignUpState>(
                   builder: (context, state) {
                     if (state is SignUpFailure) {
@@ -68,6 +75,23 @@ class SignUpScreen extends StatelessWidget {
                     }
                   },
                 ),
+                Row(
+                  children: [
+                    Text('Already has an account?'),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushReplacementNamed(context, '/signin');
+                      },
+                      child: Text(' SignIn',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondaryColor
+                        ),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
             SizedBox(
@@ -98,8 +122,9 @@ class SignUpScreen extends StatelessWidget {
                       final password = passwordController.text.trim();
                       final firstName = firstNameController.text.trim();
                       final lastName = lastNameController.text.trim();
+                      final address = addressController.text.trim();
                       context.read<SignUpBloc>().add(
-                          SignUpRequested(email, password, firstName, lastName));
+                          SignUpRequested(email, password, firstName, lastName, address));
                     },
                     child: state is SignUpLoading ? CircularProgressIndicator() : Text('Sign up'),);
                 },

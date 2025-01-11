@@ -10,6 +10,8 @@ import 'package:groceries/data/category/repositories/firebase_fetchCategory.dart
 import 'package:groceries/data/search/repositories/firebase_search_repository.dart';
 import 'package:groceries/data/user_settings/repositories/firebase_user_info.dart';
 import 'package:groceries/data/user_settings/repositories/user_info.dart';
+import 'package:groceries/domain/Home/usecases/fetch_bestSelling_usecase.dart';
+import 'package:groceries/domain/Home/usecases/fetch_newArrival_usecase.dart';
 import 'package:groceries/domain/Home/usecases/fetch_products_by_category.dart';
 import 'package:groceries/domain/cart/usecases/add_item.dart';
 import 'package:groceries/domain/cart/usecases/fetch_items.dart';
@@ -25,7 +27,10 @@ import 'package:groceries/presentation/cart/blocs/cart_bloc.dart';
 import 'package:groceries/presentation/cart/screens/cart_screen.dart';
 import 'package:groceries/presentation/category/blocs/categories_bloc.dart';
 import 'package:groceries/presentation/category/screens/products_by_category.dart';
+import 'package:groceries/presentation/home/blocs/best_sellings/best_selling_bloc.dart';
+import 'package:groceries/presentation/home/blocs/new_arrival_bloc/new_arrival_bloc.dart';
 import 'package:groceries/presentation/home/blocs/products_bloc.dart';
+import 'package:groceries/presentation/product_details/blocs/similar_products_bloc.dart';
 import 'package:groceries/presentation/search/blocs/search_bloc.dart';
 import 'package:groceries/presentation/search/screens/search_screen.dart';
 import 'package:groceries/presentation/temporary_navigation/temp_nav.dart';
@@ -66,6 +71,9 @@ void main() async {
   final userInfoUsecase = FetchUserInfoUsecase(userInfoRepository);
   final searchUsecase = SearchUsecase(searchRepository);
   final signoutUsecase = LogoutUserUsecase(authRepository);
+  final fetchBestSellingUsecase = FetchBestsellingUsecase(groceryRepository);
+  final fetchNewArrivalUsecase = FetchNewArrivalUsecase(groceryRepository);
+  final fetctGroceryByCategoryUsecase = FetchGroceriesByCategoryUsecase(groceryRepository);
 
   runApp(
     MyApp(
@@ -83,6 +91,9 @@ void main() async {
       searchRepository: searchRepository,
       searchUsecase: searchUsecase,
       logoutUserUsecase: signoutUsecase,
+      fetchBestsellingUsecase: fetchBestSellingUsecase,
+      fetchNewArrivalUsecase: fetchNewArrivalUsecase,
+      fetchGroceriesByCategoryUsecase: fetctGroceryByCategoryUsecase,
     ),
   );
 }
@@ -102,10 +113,13 @@ class MyApp extends StatelessWidget {
   final FetchUserInfoUsecase fetchUserInfoUsecase;
   final SearchUsecase searchUsecase;
   final LogoutUserUsecase logoutUserUsecase;
+  final FetchBestsellingUsecase fetchBestsellingUsecase;
+  final FetchNewArrivalUsecase fetchNewArrivalUsecase;
+  final FetchGroceriesByCategoryUsecase fetchGroceriesByCategoryUsecase;
 
   const MyApp({Key? key, required this.groceryRepository,
     required this.cartRepository , required this.authRepository,
-    required this.categoryRepository , required this.signUpUseCase, required this.addToCartUsecase, required this.fetchCartItemsUseCase, required this.removeFromCartUsecase, required this.updateCartItemUsecase, required this.fetchUserInfoUsecase, required this.userInfoRepository, required this.searchRepository, required this.searchUsecase, required this.logoutUserUsecase
+    required this.categoryRepository , required this.signUpUseCase, required this.addToCartUsecase, required this.fetchCartItemsUseCase, required this.removeFromCartUsecase, required this.updateCartItemUsecase, required this.fetchUserInfoUsecase, required this.userInfoRepository, required this.searchRepository, required this.searchUsecase, required this.logoutUserUsecase, required this.fetchBestsellingUsecase, required this.fetchNewArrivalUsecase, required this.fetchGroceriesByCategoryUsecase
   }) : super(key: key);
 
   @override
@@ -141,8 +155,17 @@ class MyApp extends StatelessWidget {
           BlocProvider<ProductsBloc>(
             create: (context) => ProductsBloc(
               FetchGroceriesUsecase(context.read<FirebaseGroceryRepository>()),
-              FetchGroceriesByCategoryUsecase(context.read<FirebaseGroceryRepository>())
+              FetchGroceriesByCategoryUsecase(context.read<FirebaseGroceryRepository>()),
             ),
+          ),
+          BlocProvider(
+              create: (context) => SimilarProductsBloc(fetchGroceriesByCategoryUsecase)
+          ),
+          BlocProvider(
+              create: (context) => BestSellingBloc(fetchBestsellingUsecase)
+          ),
+          BlocProvider(
+              create: (context) => NewArrivalBloc(fetchNewArrivalUsecase)
           ),
           BlocProvider(
               create: (context) => CartBloc( addToCartUsecase,fetchCartItemsUseCase,removeFromCartUsecase,updateCartItemUsecase),
